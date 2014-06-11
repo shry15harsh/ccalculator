@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="style.css"/>
+		<title>Calculator - Developed by Harsh</title>
+	</head>
+	<body>
+		<h1>Calculator - Developed by Harsh</h1>
+		<div id="calculator">
+			<div id="answerbox">
+				00000000000
+			</div>
+			<div id="buttonArea">
+				<li class="number" >7</li>
+				<li class="number" >8</li>
+				<li class="number" >9</li>
+				<li class="operator">-</li>
+				<li id="restart">AC</li>
+				<li class="number" >4</li>
+				<li class="number" >5</li>
+				<li class="number" >6</li>
+				<li class="operator">/</li>
+				<li id="squareroot">&radic;</li>
+				<li class="number" >1</li>
+				<li class="number" >2</li>
+				<li class="number" >3</li>
+				<li class="longKey operator" >+</li>
+				<li id="equal" class="longKey" >=</li>
+				<li class="translateUp operator" >*</li>
+				<li class="translateUp number" >0</li>
+				<li id="log" class="translateUp" >log</li>
+			</div>
+		</div>
+		<script>
+			var firstNum=0, secondNum=0, currentNum=1, operator;
+			
+			var eanswerbox = document.getElementById("answerbox");
+			var eac = document.getElementById("restart");
+			var elog = document.getElementById("log");
+			var esquareroot = document.getElementById("squareroot");
+			
+			var numbers = document.getElementsByClassName("number");
+			
+			for(var i=0; i<numbers.length; i++){
+				numbers[i].addEventListener("click", function(){
+					
+					if(currentNum == 1){
+						if(firstNum==0){
+							firstNum = this.innerHTML;
+						}
+						else{
+							firstNum+=this.innerHTML; 
+						}
+						eanswerbox.innerHTML=firstNum;
+					}
+					else{
+						if(secondNum==0){
+							secondNum = this.innerHTML;
+						}
+						else{
+							secondNum+=this.innerHTML; 
+						}
+						eanswerbox.innerHTML=secondNum;
+					}
+				});
+			}
+			
+			var operators = document.getElementsByClassName("operator");
+			
+			for(var i=0; i<operators.length; i++){
+				operators[i].addEventListener("click", function(){
+					if(parseInt(eanswerbox.innerHTML)==calculate(firstNum,secondNum,operator)){
+						firstNum = parseInt(eanswerbox.innerHTML);
+						secondNum = 0;
+					}
+					if(secondNum == 0){
+						firstNum = parseInt(firstNum);
+						operator = this.innerHTML;
+						currentNum = 2;
+					}
+					else{
+						secondNum = parseInt(secondNum);
+						firstNum = calculate(firstNum, secondNum, operator);
+						eanswerbox.innerHTML = firstNum;
+						operator = this.innerHTML;
+						secondNum = 0;
+					}
+				});
+			}
+			
+			var equalOperator = document.getElementById("equal");
+			
+			equalOperator.addEventListener("click", function(){
+				secondNum = parseInt(secondNum);
+				var answer = calculate(firstNum, secondNum, operator);
+				eanswerbox.innerHTML = answer;
+			});
+			
+			eac.addEventListener("click",function(){
+				newCalculation();
+				eanswerbox.innerHTML='00000000000';
+			});
+			
+			elog.addEventListener("click",function(){
+				if(secondNum == 0){
+					firstNum = parseInt(firstNum);
+					eanswerbox.innerHTML=Math.log(firstNum);
+				}
+				else{
+					secondNum = parseInt(secondNum);
+					eanswerbox.innerHTML = Math.log(calculate(firstNum, secondNum, operator));
+				}
+				newCalculation();
+			});
+			
+			esquareroot.addEventListener("click",function(){
+				if(secondNum == 0){
+					firstNum = parseInt(firstNum);
+					eanswerbox.innerHTML=Math.sqrt(firstNum);
+				}
+				else{
+					secondNum = parseInt(secondNum);
+					eanswerbox.innerHTML = Math.sqrt(calculate(firstNum, secondNum, operator));
+				}
+				newCalculation();
+			});
+			
+			function calculate(num1, num2, operation){
+				switch(operation){
+					case '+':return (num1+num2);
+					break;
+					case '-':return (num1-num2);
+					break;
+					case '*': return (num1*num2);
+					break;
+					case '/':return(num1/num2);
+					break;
+				}
+			}
+			function newCalculation(){
+				firstNum=0;
+				secondNum=0;
+				currentNum=1;
+			}
+		</script>
+	</body>
+</html>
